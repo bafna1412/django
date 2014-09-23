@@ -1,20 +1,10 @@
-<!DOCTYPE html>
+{% extends 'rango/base.html' %}
 
-{% load static %}  <!-- Needed to load all the images, css and java scripts -->
+{% block title %}About{% endblock %}
 
-<html>
+{% block body_block %}
 
-  <head>
-    <title>About</title>
-    <!-- To add CSS: <link rel="stylesheet" href="{% static "css/base.css" %}" /> -->
-    <!-- To add Java Script: <script src="{% static "js/jquery.js" %}"></script> -->
-  </head>
-
-  <body>
-    <h1>About Page:</h1>
+    <h6>About Page:</h6>
     {{ boldmessage }} <br />
-    <a href="/rango/index">Index</a><br />
-    <img src="{% static "cymera.jpg" %}" alt = "This is a picture edited by mobile app CYMERA" />  <!-- Syntax to add images -->
-  </body>
-
-</html>
+    {{ visits }} <br />
+{% endblock %}
