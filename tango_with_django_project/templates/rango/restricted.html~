@@ -4,4 +4,6 @@
 
 {% block body_block %}
 
+    {{ boldmessage }}
+
 {% endblock %}

@@ -6,5 +6,5 @@
 
     <h6>About Page:</h6>
     {{ boldmessage }} <br />
-    {{ visits }} <br />
+    No. of visits on Rango: {{ visits }} <br />
 {% endblock %}

@@ -9,12 +9,20 @@ from rango.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
+from rango.bing_search import run_query
 
 def encode_url(str):
     return str.replace(' ', '_')
 
 def decode_url(str):
     return str.replace('_', ' ')
+
+def get_category_list():
+    category_list = Category.objects.order_by('-likes')[:5]
+    for category in category_list:
+        category.url = encode_url(category.name)
+    cat_list = {'categories': category_list}
+    return cat_list
 
 @login_required
 def restricted(request):
@@ -28,16 +36,16 @@ def index(request):
     # Request the context of the request.
     # The context contains information such as the client's machine details, for example.
     context = RequestContext(request)
-
+    cat_list = get_category_list()
     # Query for categories and pages
     category_list = Category.objects.order_by('-likes')[:5]
     page_list = Page.objects.order_by('-views')[:5]
     # Construct a dictionary to pass to the template engine as its context.!
-    context_dict = {'categories': category_list, 'pages': page_list}
+    context_dict = {'categories': category_list, 'pages': page_list, 'cat_list': cat_list}
 
     # To create the urls for categories
     for category in category_list:
-        category.url =encode_url(category.name) 
+        category.url = encode_url(category.name) 
 
     # Return a rendered response to send to the client.
     # We make use of the shortcut function to make our lives easier.
@@ -79,7 +87,10 @@ def category(request, category_name_url):
     # This replaces underscores in the url with space to get the name.
     category_name = decode_url(category_name_url)
     context_dict = {'category_name': category_name}
-    
+    cat_list = get_category_list()
+    context_dict['cat_list'] = cat_list
+    context_dict['categories'] = cat_list
+
     try:
         # Finding the category
         category = Category.objects.get(name = category_name)
@@ -101,6 +112,15 @@ def about(request):
     # Note the key boldmessage is the same as {{ boldmessage }} in the template
     # Construct a dictionary to pass to the template engine as its context.!
     context_dict = {'boldmessage': "This is the about page of the tutorial webstie"}
+
+    # If the visits session varible exists, take it and use it.
+    # If it doesn't, we haven't visited the site so set the count to zero.
+    if request.session.get('visits'):
+        count = request.session.get('visits')
+    else:
+        count = 0
+
+    context_dict['visits'] = count
 
     return render_to_response('rango/about.html', context_dict, context)
 
@@ -177,7 +197,7 @@ def register(request):
 
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save()
-            user.set_password = (user.password)
+            user.set_password(user.password)
             user.save()
             
             profile = profile_form.save(commit = False)
@@ -204,14 +224,15 @@ def register(request):
 
 def user_login(request):
     context = RequestContext(request)
-
+    context_dict = {}
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']
 
         user = authenticate(username = username, password = password)
-        
-        if user:
+        print user
+
+        if user is not None:
             if user.is_active:
                 login(request, user)
                 return HttpResponseRedirect('/rango/')
@@ -219,7 +240,8 @@ def user_login(request):
                 return HttpResponse("Your Rango account is Disabled")
         else:
             print "Invalid Login detalils: {0}, {1}".format(username, password)
-            return HttpResponse("Invalid Login details supplied")
+            context_dict['bad_details'] = True
+            return render_to_response('rango/login.html', context_dict, context)
 
     else:
         return render_to_response('rango/login.html', {}, context)
@@ -230,3 +252,16 @@ def user_logout(request):
     
     return HttpResponseRedirect('/rango/')
 
+def search(request):
+    context = RequestContext(request)
+    result_list = []
+
+    if request.method == 'POST':
+        query = request.POST['query'].strip()
+        
+        if query:
+             # Run our Bing function to get the results list!
+             result_list = run_query(query)
+
+    return render_to_response('rango/search.html', {'result_list': result_list}, context)
+            
