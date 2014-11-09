@@ -5,6 +5,7 @@ from .api import PostList, PostDetail, EndUserPostList
 from .api import PhotoList, PhotoDetail, PostPhotoList
 
 enduser_urls = patterns('',
+                        # url(r'^/(?P<username>[0-9a-zA-Z_-]+)/feed$', EndUserFeed.as_view(), name='enduserpost-feed'),
                         url(r'^/(?P<username>[0-9a-zA-Z_-]+)/posts$', EndUserPostList.as_view(), name='enduserpost-list'),
                         url(r'^/(?P<username>[0-9a-zA-Z_-]+)$', EndUserDetail.as_view(), name='enduser-detail'),
                         url(r'^$', EndUserList.as_view(), name='enduser-list')

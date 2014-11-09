@@ -4,8 +4,7 @@ from django.contrib.auth.models import AbstractUser
 # Create your models here.
 
 class EndUser(AbstractUser):
-    followers = models.ManyToManyField('self', related_name = 'followees', symmetrical = False)
-
+    followers = models.ManyToManyField('self', related_name = 'followees', symmetrical = False, null = True)
 class Post(models.Model):
     author = models.ForeignKey(EndUser, related_name = 'posts')
     title = models.CharField(max_length = 255)

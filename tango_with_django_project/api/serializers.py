@@ -5,10 +5,11 @@ from .models import EndUser, Post, Photo
 
 class EndUserSerializer(serializers.ModelSerializer):
     posts = serializers.HyperlinkedIdentityField('posts', view_name = 'enduserpost-list', lookup_field = 'username')
-
+    profile = serializers.HyperlinkedIdentityField('profile', view_name = 'enduser-detail', lookup_field = 'username')
+    # followers = serializers.HyperlinkedIdentityField('followers', view_name = 'enduser-detail', lookup_field = 'followers')
     class Meta:
         model = EndUser
-        fields = ('id', 'username', 'first_name', 'last_name', 'posts', )
+        fields = ('id', 'username', 'first_name', 'last_name', 'followers', 'posts', 'profile', )
 
 class PostSerializer(serializers.ModelSerializer):
     author = EndUserSerializer(required = False)

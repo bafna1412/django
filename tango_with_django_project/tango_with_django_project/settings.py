@@ -154,6 +154,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'rango.onlineMiddleware.OnlineNowMiddleware',
+    'count.onlineMiddleware.OnlineNowMiddleware',
 )
 
 ROOT_URLCONF = 'tango_with_django_project.urls'
@@ -187,6 +189,7 @@ INSTALLED_APPS = (
     'south',
     'rango',
     'api',
+    'count',
 )
 
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.JSONSerializer'

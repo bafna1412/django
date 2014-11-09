@@ -40,7 +40,8 @@ urlpatterns = patterns('',
     url(r'^', include(router.urls)),
     url(r'^api-path/', include('rest_framework.urls', namespace = 'rest_framework')),
     url(r'^accounts/', include('allauth.urls')),
-    url(r'^api/', include('api.urls')),
+    url(r'^api/', include('api.urls')),    
+    url(r'^count/', include('count.urls')),
 )
 
 if settings.DEBUG:

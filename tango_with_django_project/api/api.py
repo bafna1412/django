@@ -1,8 +1,30 @@
 from rest_framework import generics, permissions
+from django.http import HttpResponse, HttpResponseServerError
 
 from .serializers import EndUserSerializer, PostSerializer, PhotoSerializer
 from .models import EndUser, Post, Photo
 from .permissions import PostAuthorCanEditPermission
+
+import redis
+
+# class EndUserFeed(generics.ListAPIView):
+#    model = EndUser
+#    serializer_class = EndUserSerializer
+#    lookup_field = 'username'
+#    permission_classes = [
+#        permissions.AllowAny
+#    ]
+   
+     # Getting list of followers and their posts for a user
+    # followers = []
+#    posts = {}
+    # followers = EndUser.objects.get(followers)
+    # posts.update(EndUser.objects.all())
+    # feed = {"posts": posts}
+
+    # Now push the collected posts on site
+#    r = redis.StrictRedis(host = 'localhost', port = 6379, db = 0)
+#    r.publish('feed', Post.objects.all())
 
 class EndUserList(generics.ListCreateAPIView):
     model = EndUser
@@ -14,7 +36,7 @@ class EndUserList(generics.ListCreateAPIView):
 class EndUserDetail(generics.RetrieveUpdateDestroyAPIView):
     model = EndUser
     serializer_class = EndUserSerializer
-    lookup_field = 'username'
+    lookup_field = 'username' 
 
 class PostMixin(object):
     model = Post

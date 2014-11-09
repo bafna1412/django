@@ -1,0 +1,15 @@
+{
+  "name" : "node.js",
+  "description" : "Realtime stats using node.js, socket.io and redis",
+  "version" : "0.0.1",
+  "author": {
+    "name": "Siddharth Bafna",
+    "email": "bafna.siddharth@gmail.com"
+  },
+  "dependencies" : {
+    "redis": "",
+    "socket.io": "",
+    "express": ""
+  }
+
+}

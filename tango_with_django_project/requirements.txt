@@ -52,9 +52,11 @@ pyobjc-framework-XgridFoundation==2.3.2a0
 python-dateutil==1.5
 python-openid==2.2.5
 pytz==2012d
+redis==2.10.3
 requests==2.4.3
 requests-oauthlib==0.4.1
 scipy==0.11.0
+virtualenv==1.11.6
 wsgiref==0.1.2
 xattr==0.6.4
 zope.interface==3.8.0
